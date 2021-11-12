@@ -1,0 +1,6 @@
+oztool c++ -c Iterator_OZ_FDIntVar.cpp
+oztool c++ -c ExtendedExpect.cpp
+oztool c++ -c activeSetPropV2.cpp -o activeSetPropV2.o
+oztool ld -o activeSetProp.so-linux-i486  activeSetPropV2.o ExtendedExpect.o Iterator_OZ_FDIntVar.o /home/alvilleg/tmp/mozart/platform/emulator/s-clone.lo
+
+

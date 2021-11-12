@@ -1,0 +1,4 @@
+#!/bin/sh
+ozc -c ReadFile.oz -o ReadFile.ozf
+ozc -c  ResetNetwork.oz -o  ResetNetwork.ozf
+ozc -c Main.oz -o Oztnet.oza

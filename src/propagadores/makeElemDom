@@ -1,0 +1,2 @@
+oztool c++ -c ElemDom.cpp -o ElemDom.o
+oztool ld -o ElemDom.so-linux-i486  ElemDom.o ExtendedExpect.o Iterator_OZ_FDIntVar.o  /home/alvilleg/tmp/mozart/platform/emulator/s-clone.lo

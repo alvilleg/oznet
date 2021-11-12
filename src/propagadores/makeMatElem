@@ -1,0 +1,2 @@
+oztool c++ -c matElemProp.cpp -o matElemProp.o
+oztool ld -o matElemProp.so-linux-i486  matElemProp.o ExtendedExpect.o Iterator_OZ_FDIntVar.o /home/alvilleg/tmp/mozart/platform/emulator/s-clone.lo

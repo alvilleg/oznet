@@ -1,0 +1,190 @@
+/***************************************************************************
+ *  Autor : Aldemar Villegas
+ *  Fecha : Febrero 12 de 2006
+ ***************************************************************************/
+
+#include <iostream.h>
+#include "mozart_cpi.hh" 
+#include "math.h"
+#define FailOnEmpty(X) if((X) == 0) goto failure; 
+#define PI 3.14159265 
+OZ_BI_proto(fd_azim); 
+
+class azimProp : public OZ_Propagator 
+{ 
+
+  private: 
+    static OZ_PropagatorProfile profile;
+    OZ_Term _group,_antenna; 
+    OZ_Term _x1,_x2,_y1,_y2,_anglePpal,_dif;
+
+  public:  
+   
+    azimProp(OZ_Term group,OZ_Term antenna,OZ_Term angle,OZ_Term x1,OZ_Term x2,OZ_Term y1,OZ_Term y2, OZ_Term dif );        
+    virtual OZ_Return propagate(void);   
+    virtual size_t azimProp::sizeOf(void) 
+    { 
+      return sizeof(azimProp); 
+    }
+
+    virtual void azimProp::gCollect(void) 
+    {       
+      OZ_gCollectTerm(_group);          
+      OZ_gCollectTerm(_antenna);          
+      OZ_gCollectTerm(_anglePpal);          
+    } 
+	
+	
+    virtual void azimProp::sClone(void) 
+    { 
+      OZ_gCollectTerm(_anglePpal); 
+      OZ_gCollectTerm(_group);     
+      OZ_gCollectTerm(_antenna);
+    }
+	
+	
+    virtual OZ_Term azimProp::getParameters(void) const 
+    {     
+      return OZ_cons(_anglePpal, 
+                   OZ_cons(_group, 
+                           OZ_cons(_antenna, OZ_nil()))); 
+    }   	
+
+    virtual OZ_PropagatorProfile *getProfile(void) const 
+    { 
+      return &profile; 
+    } 	
+};
+  OZ_PropagatorProfile azimProp::profile;
+  
+  azimProp::azimProp(OZ_Term group,OZ_Term antenna,OZ_Term angle,OZ_Term x1,OZ_Term x2,OZ_Term y1,OZ_Term y2,OZ_Term dif) : _group(group),_antenna(antenna), _anglePpal(angle),_x1(x1),_x2(x2),_y1(y1),_y2(y2),_dif(dif){} 	
+	    	
+  OZ_Return azimProp::propagate(void) 
+  {     
+    cout<<"antes ciclo"<<endl;	 
+    OZ_FDIntVar  group(_group), antenna(_antenna);
+    OZ_FDIntVar angle(_anglePpal); 
+    OZ_FiniteDomain groupAux(fd_empty), antennaAux(fd_empty); 
+    OZ_FiniteDomain angleAux(fd_empty);
+    double angRads,azimRel;    
+    double x2Def;
+    double y2Def;             
+    double dx;//-x1;
+    double dy;//-y1;
+    int cuadrante,y2,x2,ant,groupAzim,angDegrees;
+    cout<<"antes ciclo"<<endl;	  
+    for(int j=angle->getMinElem(); j != -1; j = angle->getNextLargerElem(j))
+    {
+      //Código que conecta las variables
+      // se calcula el azimuth relativo, se incluye en el grupo que corresponda
+      // se determina la antena que le da cobertura al punto      
+        /**Se trasladan las coordenadas**/       
+    	cout<<" dentro "<<j<<endl; 
+        x2= _x2-_x1;
+        y2=_y2-_y1;                    
+        /**Se hace la rotación con relación al ángulo principal de azimuth de la radiobase**/    
+        angRads=-j*(PI/180);    
+        x2Def= x2*cos(angRads)+y2*sin(angRads);
+        y2Def= -x2*sin(angRads)+y2*cos(angRads);             
+        dx=x2Def;
+        dy=y2Def;        
+	angDegrees = (int)( abs((atan( dy/dx)) * (180/PI)));
+	if(dx==0.0)
+        {
+          if(dy==0.0)
+            cuadrante= 1;
+          if(dy > 0) 
+            cuadrante= 2;
+          else
+            cuadrante= 4;
+        }
+        if(dx > 0.0)
+        {
+          if(dy>=0.0)
+            cuadrante= 1;
+          else
+            cuadrante =4;  
+        }   
+    
+        if(dx <0.0)
+        {
+          if(dy<=0.0)
+            cuadrante= 3;
+          else
+            cuadrante= 2;      
+        }        
+        if(dx!=0)
+          if(cuadrante ==4 || cuadrante == 2)
+            azimRel= (90*cuadrante - angDegrees);
+          else 
+            azimRel= (90*cuadrante - angDegrees);   
+       else
+         azimRel= (cuadrante-1)*90;
+      groupAzim= (int)(((int)(azimRel)%120)/_dif);      
+      ant = (int)(azimRel/120)+1;
+      cout<<"Grupo = "<<groupAzim<<" dif "<<_dif<<" azimRel = "<<azimRel<<" cuad = "<<cuadrante<<" ant = "<<ant<<endl;	       
+      if (group->isIn(groupAzim))
+      {
+        angleAux+=j;
+	groupAux+=groupAzim;
+// 	if(antenna->isIn(ant))
+// 	{
+	  antennaAux+=ant;
+// 	}
+      }
+    }         
+    FailOnEmpty(*group &= groupAux); 
+    FailOnEmpty(*antenna &= antennaAux);	
+    FailOnEmpty(*angle &= angleAux);	
+    
+    return (group.leave() |antenna.leave()|angle.leave()) ? OZ_SLEEP : OZ_ENTAILED; 
+    failure: 
+      antenna.fail(); 
+      group.fail(); 
+      angle.fail();
+      return OZ_FAILED; 
+  }
+  
+  OZ_BI_define(fd_azim,8 , 0) 
+  { 
+    OZ_EXPECTED_TYPE(OZ_EM_FD","OZ_EM_FD","OZ_EM_FD","OZ_EM_LIT","OZ_EM_LIT","OZ_EM_LIT","OZ_EM_LIT","OZ_EM_LIT); 
+    OZ_Expect pe; 
+    OZ_EXPECT(pe, 0, expectIntVar); 
+    OZ_EXPECT(pe, 1, expectIntVar); 
+    OZ_EXPECT(pe, 2, expectIntVar); 
+    OZ_EXPECT(pe, 3, expectInt);
+    OZ_EXPECT(pe, 4, expectInt);
+    OZ_EXPECT(pe, 5, expectInt);
+    OZ_EXPECT(pe, 6, expectInt);
+    OZ_EXPECT(pe, 7, expectInt);  
+    
+    OZ_Term entrada3 = (OZ_in(3)-14)/16;
+    OZ_Term entrada4 = (OZ_in(4)-14)/16;
+    OZ_Term entrada5 = (OZ_in(5)-14)/16;
+    OZ_Term entrada6 = (OZ_in(6)-14)/16;
+    OZ_Term entrada7 = (OZ_in(7)-14)/16;
+  
+  
+  cout<<"\n" <<" x1 Radiobase="<<entrada3;
+  cout<<"\n" <<" x2 Punto="<<entrada4;
+  cout<<"\n" <<" y1 Radiobase="<<entrada5;
+  cout<<"\n" <<" y2 Punto="<<entrada6;
+  
+  
+    return pe.impose(
+    			new azimProp
+			(OZ_in(0), OZ_in(1),OZ_in(2),entrada3,entrada4,entrada5,entrada6,entrada7)); 
+
+  } OZ_BI_end
+        
+  OZ_C_proc_interface *oz_init_module(void) 
+  {	
+    static OZ_C_proc_interface i_table[] = 
+    { 
+      {"azim", 8, 0, fd_azim}, 
+      {0,0,0,0} 
+    }; 
+    cout<<"azim propagator loaded"<<"\n"; 
+    return i_table; 
+  }
+   

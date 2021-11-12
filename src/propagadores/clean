@@ -1,0 +1,4 @@
+#!/bin/sh
+rm -fr *.o
+rm -fr *.*~
+rm -fr *.so-linux-i486

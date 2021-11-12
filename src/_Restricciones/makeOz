@@ -1,0 +1,9 @@
+#!/bin/sh
+rm -rf *.ozf
+rm -fr *.oza
+rm -fr *.*~
+ozc -c ReadFile.oz -o ReadFile.ozf
+ozc -c WriteOut.oz -o WriteOut.ozf
+ozc -c ResetNetwork.oz -o ResetNetwork.ozf
+ozc -c Propagadores.oz -o Propagadores.ozf
+ozc -c Main.oz -o Oztnet.oza

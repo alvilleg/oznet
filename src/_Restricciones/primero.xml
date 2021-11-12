@@ -1,0 +1,55 @@
+<?xml version="1.0" ?>
+<red nombre ="nombreRed" sec = "1" cobertura="1">
+	<estacionBase trafico="1" probBloqueo="0">
+		<antena tilt="70" azimut="30" potencia="30"></antena>
+		<antena tilt="60" azimut="150" potencia ="40"></antena>
+		<antena tilt="45" azimut="270" potencia="45"></antena>
+	</estacionBase>
+
+</red>onBase trafico="10" probBloqueo="0">
+		<antena tilt="0" azimut="0" potencia="10"></antena>
+		<antena tilt="0" azimut="120" potencia ="10"></antena>
+		<antena tilt="0" azimut="240" potencia="10"></antena>
+	</estacionBase>
+	<estacionBase trafico="45" probBloqueo="0">
+		<antena tilt="0" azimut="0" potencia="10"></antena>
+		<antena tilt="0" azimut="120" potencia ="10"></antena>
+		<antena tilt="0" azimut="240" potencia="10"></antena>
+	</estacionBase>
+	<estacionBase trafico="25" probBloqueo="0">
+		<antena tilt="0" azimut="0" potencia="10"></antena>
+		<antena tilt="0" azimut="120" potencia ="10"></antena>
+		<antena tilt="0" azimut="240" potencia="10"></antena>
+	</estacionBase>
+	<estacionBase trafico="10" probBloqueo="0">
+		<antena tilt="0" azimut="0" potencia="10"></antena>
+		<antena tilt="0" azimut="120" potencia ="10"></antena>
+		<antena tilt="0" azimut="240" potencia="10"></antena>
+	</estacionBase>
+	<estacionBase trafico="10" probBloqueo="0">
+		<antena tilt="0" azimut="0" potencia="10"></antena>
+		<antena tilt="0" azimut="120" potencia ="10"></antena>
+		<antena tilt="0" azimut="240" potencia="10"></antena>
+	</estacionBase>
+	<estacionBase trafico="15" probBloqueo="0">
+		<antena tilt="0" azimut="0" potencia="10"></antena>
+		<antena tilt="0" azimut="120" potencia ="10"></antena>
+		<antena tilt="0" azimut="240" potencia="10"></antena>
+	</estacionBase>
+	<estacionBase trafico="30" probBloqueo="0">
+		<antena tilt="0" azimut="0" potencia="10"></antena>
+		<antena tilt="0" azimut="120" potencia ="10"></antena>
+		<antena tilt="0" azimut="240" potencia="10"></antena>
+	</estacionBase>
+	<estacionBase trafico="30" probBloqueo="0">
+		<antena tilt="0" azimut="0" potencia="10"></antena>
+		<antena tilt="0" azimut="120" potencia ="10"></antena>
+		<antena tilt="0" azimut="240" potencia="10"></antena>
+	</estacionBase>
+	<estacionBase trafico="50" probBloqueo="0">
+		<antena tilt="0" azimut="0" potencia="10"></antena>
+		<antena tilt="0" azimut="120" potencia ="10"></antena>
+		<antena tilt="0" azimut="240" potencia="10"></antena>
+	</estacionBase>
+
+</red>

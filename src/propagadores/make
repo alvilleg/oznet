@@ -1,0 +1,23 @@
+#!/bin/sh
+./clean
+oztool c++ -c tiltProp.cpp -o tiltProp.o
+oztool c++ -c azimProp.cpp -o azimProp.o
+oztool c++ -c Iterator_OZ_FDIntVar.cpp
+oztool c++ -c ExtendedExpect.cpp
+oztool c++ -c InterferenceProp.cpp -o InterferenceProp.o
+oztool c++ -c BloqueoProp.cpp -o BloqueoProp.o
+oztool c++ -c ExecCommand.cpp -o execCommand.o
+oztool c++ -c ErlangB.cpp
+
+oztool c++ -c activeSetPropV3.cpp -o activeSetPropV2.o
+oztool c++ -c matElemPropV2.cpp -o matElemProp.o
+oztool c++ -c constantStruct.cpp -o constantStruct.o
+
+
+oztool ld -o execCommand.so-linux-i486 execCommand.o
+oztool ld -o tilt.so-linux-i486 tiltProp.o  s-clone.lo
+oztool ld -o azim.so-linux-i486 azimProp.o  s-clone.lo
+oztool ld -o bloqueo.so-linux-i486 BloqueoProp.o ErlangB.o ExtendedExpect.o Iterator_OZ_FDIntVar.o  s-clone.lo
+oztool ld -o interference.so-linux-i486  InterferenceProp.o  ExtendedExpect.o Iterator_OZ_FDIntVar.o  s-clone.lo
+oztool ld -o activeSetProp.so-linux-i486  activeSetPropV2.o ExtendedExpect.o Iterator_OZ_FDIntVar.o s-clone.lo
+oztool ld -o matElemProp.so-linux-i486  matElemProp.o ExtendedExpect.o Iterator_OZ_FDIntVar.o constantStruct.o s-clone.lo

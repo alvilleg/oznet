@@ -1,0 +1,16 @@
+#!/bin/sh
+./clean
+oztool c++ -c Iterator_OZ_FDIntVar.cpp
+oztool c++ -c  ExtendedExpect.cpp
+#oztool ld -o erlang.so-linux-i486  .o
+
+oztool c++ -c erlangProp.cpp
+oztool ld -o erlang.so-linux-i486  erlangProp.o  ExtendedExpect.o Iterator_OZ_FDIntVar.o
+
+#oztool c++ -c azimProp.cpp -o azimProp.o
+#oztool ld -o addProp.so addprop.o
+#oztool ld -o azim.so-linux-i486 azimProp.o
+#oztool c++ -c tiltProp.cpp -o tiltProp.o
+#oztool ld -o addProp.so addprop.o
+#oztool ld -o tilt.so-linux-i486 tiltProp.o
+

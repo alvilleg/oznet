@@ -1,0 +1,13 @@
+#!/bin/sh
+rm -rf *.ozf
+rm -fr *.oza
+rm -fr *.*~
+ozc -c Misc.oz -o Misc.ozf
+ozc -c ReadFile.oz -o ReadFile.ozf
+ozc -c WriteOut.oz -o WriteOut.ozf
+ozc -c RelaxObjectives.oz -o RelaxObjectives.ozf
+ozc -c Distribute.oz -o Distribute.ozf
+ozc -c DistOztnet.oz -o DistOztnet.ozf
+ozc -c ResetNetwork.oz -o ResetNetwork.ozf
+ozc -c Main.oz -o Oztnet.oza
+
